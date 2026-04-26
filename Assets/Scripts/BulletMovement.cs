@@ -26,15 +26,10 @@ public class BulletMovement : MonoBehaviour
         rb.AddForce(direction * force, ForceMode2D.Impulse);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if (!other.gameObject.CompareTag("Player"))
         {
-            if (other.gameObject.CompareTag("Enemy"))
-            {
-                Destroy(other.gameObject);
-            }
-
             Destroy(gameObject);
         }
     }

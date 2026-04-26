@@ -4,26 +4,44 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Movement movementCharacter;
-    public GameObject player;
+    private GameObject player;
     public Button startButton;
     public GameObject tutorialLabel;
+    public GameObject youLoseLabel;
+    public bool gameStart = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         startButton.onClick.AddListener(OnStartClicked);
-        movementCharacter = player.GetComponent<Movement>();
+        tutorialLabel.SetActive(true);
+        youLoseLabel.SetActive(false);
+        player = GameObject.FindWithTag("Player");
+
+        if (gameStart && player == null)
+        {
+            Debug.Log("Cannot Find Player");
+            EndGame();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (gameStart && player == null)
+        {
+            EndGame();
+        }
     }
     void OnStartClicked()
     {
         tutorialLabel.SetActive(false);
-        movementCharacter.canMove = true;
+        gameStart = true;
+    }
+
+    void EndGame()
+    {
+        youLoseLabel.SetActive(true);
+        gameStart = false;
     }
 }

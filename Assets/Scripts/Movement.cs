@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private MovementCharacter movementCharacter;
-    public bool canMove = false;
     public InputAction jumpAction;
     public InputAction attackAction;
     public InputAction dashAction;
@@ -18,10 +18,13 @@ public class Movement : MonoBehaviour
     void Start()
     {
         movementCharacter = GetComponent<MovementCharacter>();
+        gameManager = GameObject.FindWithTag("Game Manager").GetComponent<GameManager>();
     }
     void Update()
     {
-        if (canMove)
+        if (gameManager == null) return;
+        
+        if (gameManager.gameStart)
         {
             float horizontalInput = Input.GetAxis("Horizontal");
             movementCharacter.OnMovementCharacter(horizontalInput);
