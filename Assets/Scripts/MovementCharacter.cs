@@ -13,6 +13,8 @@ public class MovementCharacter : MonoBehaviour
     [SerializeField] private float radiusGroundCheck = 0.1f;
     [SerializeField] public bool isGround;
     public int consecutiveJump = 2;
+    private bool facingRight = true;
+    public Animator animator;
 
     [Header("Dash Config")]
     public int consecutiveDash = 2;
@@ -30,6 +32,10 @@ public class MovementCharacter : MonoBehaviour
     void Update()
     {
         CheckGround();
+
+        animator.SetBool("isGrounded", isGround);
+        animator.SetFloat("yVelocity", rb2D.linearVelocity.y);
+        animator.SetFloat("Speed", Mathf.Abs(rb2D.linearVelocity.x));
     }
     
     private void CheckGround()
@@ -46,6 +52,18 @@ public class MovementCharacter : MonoBehaviour
 
     public void OnMovementCharacter(float dirX)
     {
+        float horizontalMove = Input.GetAxis("Horizontal");
+        animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
+
+        if (dirX > 0 && !facingRight)
+        {
+            Flip();
+        }
+        else if (dirX < 0 && facingRight)
+        {
+            Flip();
+        }
+
         float lerpFactor = isGround ? 0.2f : 0.05f;
         float xVelocity = Mathf.Lerp(rb2D.linearVelocity.x, dirX * movementSpeed, lerpFactor);
 
@@ -122,5 +140,13 @@ public class MovementCharacter : MonoBehaviour
         {
             consecutiveJump = 2;
         }
+    }
+
+    private void Flip()
+    {
+        facingRight = !facingRight;
+        Vector3 currentScale = transform.localScale;
+        currentScale.x *= -1;
+        transform.localScale = currentScale;
     }
 }

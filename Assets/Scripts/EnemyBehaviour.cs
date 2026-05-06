@@ -5,9 +5,11 @@ public class EnemyBehaviour : MonoBehaviour
     public EnemySO data;
     public Transform player;
     private Rigidbody2D rbEnemy;
+    public ChangePoints changePoints;
     public int health;
     public float speed;
     public int damage;
+    public int points;
     public float lastAttack;
     public float attackCooldown;
 
@@ -17,6 +19,7 @@ public class EnemyBehaviour : MonoBehaviour
         health = data.health;
         speed = data.speed;
         damage = data.damage;
+        points = data.points;
         attackCooldown = data.attackCooldown;
     }
 
@@ -24,6 +27,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player").transform;
         rbEnemy = GetComponent<Rigidbody2D>();
+        changePoints = GameObject.FindWithTag("Player").GetComponent<ChangePoints>();
     }
 
     void Update()
@@ -74,6 +78,7 @@ public class EnemyBehaviour : MonoBehaviour
             if (health <= 0)
             {
                 Destroy(gameObject);
+                changePoints.addPoints(points);
             }
         }
     }
